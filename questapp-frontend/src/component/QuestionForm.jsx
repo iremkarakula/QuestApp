@@ -1,13 +1,26 @@
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import axios from 'axios';
 import React, { useState } from 'react'
 
 function QuestionForm() {
     const [title, setTitle] = useState("");
-    const [question, setQuestion] = useState("");
+    const [text, setText] = useState("");
+
+    const handleSubmit = async () => {
+
+        try {
+            const response = await axios.post("http://localhost:8080/post/createpost", { title, text });
+            console.log("başarılı")
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
     return (
-        <form className='bg-white w-full max-w-2xl m-auto p-4'>
+        <form className='bg-white w-full max-w-2xl m-auto p-4' onSubmit={handleSubmit}>
             <div className='space-y-4'>
                 <div className='flex space-x-4 items-center'>
                     <div className='rounded-full w-20 h-20 border bg-gray-500'>
@@ -27,7 +40,7 @@ function QuestionForm() {
                 </div>
                 <div>
                     <Textarea
-                        onChange={(e) => setQuestion(e.target.value)}
+                        onChange={(e) => setText(e.target.value)}
                         placeholder="Bir soru giriniz"
                         maxLength={250}
                         required
@@ -35,9 +48,9 @@ function QuestionForm() {
                 </div>
                 <div className="flex justify-between items-start">
                     <p className='text-gray-500'>
-                        {question.length}/250 karakter
+                        {text.length}/250 karakter
                     </p>
-                    <Button>
+                    <Button type="submit">
                         Gönder
                     </Button>
                 </div>
